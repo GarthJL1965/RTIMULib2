@@ -188,7 +188,7 @@ static PyMethodDef RTIMU_RTIMU_methods[] = {
     //////// getIMUData
     {"getIMUData", (PyCFunction)([] (PyObject *self, PyObject* args) -> PyObject* {
         const RTIMU_DATA& data = ((RTIMU_RTIMU*)self)->val->getIMUData();
-        return Py_BuildValue("{s:K,s:O,s:(d,d,d),s:O,s:(d,d,d,d),s:O,s:(d,d,d),s:O,s:(d,d,d),s:O,s:(d,d,d),s:O,s:d,s:O,s:d,s:O,s:d}",
+        return Py_BuildValue("{s:K,s:O,s:(d,d,d),s:O,s:(d,d,d,d),s:O,s:(d,d,d),s:O,s:(d,d,d),s:O,s:(d,d,d)}",
                  "timestamp", data.timestamp,
                  "fusionPoseValid", PyBool_FromLong(data.fusionPoseValid),
                  "fusionPose", data.fusionPose.x(), data.fusionPose.y(), data.fusionPose.z(),
@@ -199,14 +199,12 @@ static PyMethodDef RTIMU_RTIMU_methods[] = {
                  "accelValid", PyBool_FromLong(data.accelValid),
                  "accel", data.accel.x(), data.accel.y(), data.accel.z(),
                  "compassValid", PyBool_FromLong(data.compassValid),
-                 "compass", data.compass.x(), data.compass.y(), data.compass.z(),
-                 "pressureValid", PyBool_FromLong(data.pressureValid),
-                 "pressure", data.pressure,
-                 "temperatureValid", PyBool_FromLong(data.temperatureValid),
-                 "temperature", data.temperature,
-                 "humidityValid", PyBool_FromLong(data.humidityValid),
-                 "humidity", data.humidity);
-
+                 "compass", data.compass.x(), data.compass.y(), data.compass.z());
+/*
+                 "pressure", data.pressureValid ? PyFloat_FromDouble(data.pressure):Py_None,
+                 "temperature", data.temperatureValid ? PyFloat_FromDouble(data.temperature):Py_None,
+                 "humidity", data.humidityValid ? PyFloat_FromDouble(data.humidity):Py_None
+*/
         }),
     METH_NOARGS,
     "Return true if valid bias" },
