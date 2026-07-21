@@ -26,6 +26,8 @@
 #
 # Copyright 2014 Ettus Research LLC
 #
+# Copyright 2026 GJL
+#
 
 ########################################################################
 IF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
@@ -35,7 +37,7 @@ ENDIF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 ########################################################################
 # Project setup
 ########################################################################
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.31)
 PROJECT(RTIMULib CXX)
 ENABLE_TESTING()
 

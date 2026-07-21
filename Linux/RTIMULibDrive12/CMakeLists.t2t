@@ -26,11 +26,13 @@
 #
 # Copyright 2014 Ettus Research LLC
 #
-# Copyright 2026+ GJL - Start modernising, Add cross compile
+# Copyright 2026 GJL : Extending for cross-compile & Later 'Modernising' Work based on previous ettus et al
+# Also see https://runebook.dev/en/docs/cmake/variable/cmake_install_prefix and the usage of GNUInstallDirs 
+#   vs CMAKE_INSTALL_PREFIX
 #
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.31.6)
-PROJECT(RTIMULibCal LANGUAGES CXX)
+PROJECT(RTIMULibDrive12 LANGUAGES CXX)
 
 # GJL:TODO
 # Require C++17 (or newer if needed)
@@ -38,31 +40,10 @@ PROJECT(RTIMULibCal LANGUAGES CXX)
 #set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_CXX_EXTENSIONS OFF)
 
-option (ENABLE_CROSS_COMPILE "Enable cross compile RPATH settings" OFF)
-
-if (ENABLE_CROSS_COMPILE)
-  # Optional: Also set install RPATH for installed binaries
-  # Use, ie don't skip the full RPATH for the build tree
-  SET(CMAKE_SKIP_BUILD_RPATH FALSE)
-
-  # When building, don't use the install RPATH
-  # (but use later on when installing)
-  SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
- 
-  # Set RPATH for the installed executable ** Needs to be done after target eg ADD_EXECUTABLE set **
-  ##SET_TARGET_PROPERTIES(RTIMULibCal PROPERTIES
-  ##    INSTALL_RPATH "\${ORIGIN}/../lib\${ORIGIN}/lib"  # Escape $ with \ to preserve it
-  ##)
-
-  # Add determined parts of RPATH which point to directories outside
-  # build tree to the INSTALL RPATH
-  #SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-  # Wasil Zafar : "Append to existing RPATH (Don't overwrite)
-  # GJL : We WANT to overwrite the existing RPATH, else we end up with eg 
-  #                                vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv <- wrong !!!
-  # ${ORIGIN}/../lib:${ORIGIN}/lib:/home/gjl/dev/cpp/RTIMULib2/.local
-  SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
-endif()
+# Optional: Also set install RPATH for installed binaries
+SET(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
+SET(CMAKE_INSTALL_RPATH "$ORIGIN")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Expand $HOME to an absolute path - We use this because we want cross-compiled lib only!
 FILE(TO_CMAKE_PATH "$ENV{HOME}/dev/cpp/RTIMULib2/.local" RTIMULIB_LOCAL_PATH)
@@ -89,38 +70,50 @@ else()
 endif()
 
 # Add Sources - no globbing !
-SET(RTIMULibCal_SRCS
-    RTIMULibCal.cpp
+SET(RTIMULibDrive12_SRCS
+#   src/RTIMULibDrive12.cpp
+    RTIMULibDrive12.cpp
 )
 
 # Add your executable
-ADD_EXECUTABLE(RTIMULibCal
-    ${RTIMULibCal_SRCS}
+ADD_EXECUTABLE(RTIMULibDrive12
+    ${RTIMULibDrive12_SRCS}
 )
 
-if (ENABLE_CROSS_COMPILE)
-  # Set RPATH for the installed executable
-  SET_TARGET_PROPERTIES(RTIMULibCal PROPERTIES
-      INSTALL_RPATH "\${ORIGIN}/../lib\${ORIGIN}/lib"  # Escape $ with \ to preserve it
-  )
-endif()
-
 # Link RTIMULib
-TARGET_LINK_LIBRARIES(RTIMULibCal
+TARGET_LINK_LIBRARIES(RTIMULibDrive12 
     PRIVATE "${RTIMULIB_LIBRARY}"
 )
 
-INSTALL(TARGETS RTIMULibCal 
-  DESTINATION bin
+# Include headers if needed
+TARGET_INCLUDE_DIRECTORIES(RTIMULibDrive12 PRIVATE
+    "${CMAKE_SOURCE_DIR}/include"
+    "${RTIMULIB_LOCAL_PATH}/include"
 )
 
-#[[ GJL - 'old'
-SET(CAL_SRCS
-    RTIMULibCal.cpp)
+# Automatically copy libRTIMULib.so into build output directory
+add_custom_command(
+    TARGET RTIMULibDrive12 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${RTIMULIB_LOCAL_PATH}/lib/libRTIMULib.so"
+        "$<TARGET_FILE_DIR:RTIMULibDrive12>"
+    COMMENT "Copying libRTIMULib.so to build output directory"
+)
 
-ADD_EXECUTABLE(RTIMULibCal ${CAL_SRCS})
-TARGET_LINK_LIBRARIES(RTIMULibCal RTIMULib)
+# Optional: Install rules
+INSTALL(TARGETS RTIMULibDrive12 
+    RUNTIME DESTINATION bin)
+# install libRTIMULib.so not required here, is done from own build
+#INSTALL(FILES "${RTIMULIB_LOCAL_PATH}/lib/libRTIMULib.so"
+#    DESTINATION bin
+#)
 
-INSTALL(TARGETS RTIMULibCal DESTINATION bin)
-]]
+# GJL:TODO - Remove all below
+#SET(DRIVE_SRCS
+#    RTIMULibDrive12.cpp)
+#
+#ADD_EXECUTABLE(RTIMULibDrive12 ${DRIVE_SRCS})
+#TARGET_LINK_LIBRARIES(RTIMULibDrive12 RTIMULib)
+#
+#INSTALL(TARGETS RTIMULibDrive12 DESTINATION bin)
 

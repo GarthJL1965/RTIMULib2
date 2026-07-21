@@ -23,3 +23,7 @@ If magnetometer ellipsoid fit isn't required, RTIMULibCal can be run anywhere. I
 The normal process is to run the magnetometer min/max option followed by the magnetometer ellipsoid fit option followed finally by the accelerometer min/max option. The program is self-documenting in that the instructions for every option will be displayed when the option is selected.
 
 The resulting RTIMULib.ini can then be used by any other RTIMULib application.
+
+### OFFLINE !! (GJL)
+
+The ellipsoid fit process can be run offline - details TBD
