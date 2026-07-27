@@ -101,7 +101,8 @@ ADD_EXECUTABLE(RTIMULibCal
 if (ENABLE_CROSS_COMPILE)
   # Set RPATH for the installed executable
   SET_TARGET_PROPERTIES(RTIMULibCal PROPERTIES
-      INSTALL_RPATH "\${ORIGIN}/../lib\${ORIGIN}/lib"  # Escape $ with \ to preserve it
+  #    INSTALL_RPATH "\${ORIGIN}/../lib\${ORIGIN}/lib"  # Escape $ with \ to preserve it
+      INSTALL_RPATH "\${ORIGIN}/../lib:\${ORIGIN}/lib"  # Escape $ with \ to preserve it
   )
 endif()
 
