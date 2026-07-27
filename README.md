@@ -106,9 +106,9 @@ Also, if using a non-standard axis rotation, magnetometer calibration (and accel
 This is a fork of richards-tech's library - this version adds support for an IMU (no-name brand) containing an HMC5883L compass, an ADXL345 accelerometer, and an L3G4200D gyro.  This support is experimental and currently incomplete.  Some stuff is hard-coded that should be configurable, but it generally works reliably and gets accurate data from the sensors.
 
 
-##GJL:
+## GJL:
 
-I wouldn't expect anyone to be interested, but the changes I'm mkaing are along the lines of:
+I wouldn't expect anyone to be interested, but the changes I'm making are along the lines of:
 
 * Adding a dedicated IMU Type for BerryIMUV4 - this is NOT the same as the current [STM LSM6DS33 + LIS3MDL (optionally with the LPS25H) as used on the Pololu MinIMU-9 v5 and AltIMU-10 v5.] because the BerryIMUV4 has an on-board GPS, plus a Bosch BMP380.
 * Definately re-working the IMU discovery code - its horrible to add a new IMU !. I'm thinking of the existing code as a discovery/probe, but adding a 'compostion' type definition.
