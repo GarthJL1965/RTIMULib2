@@ -112,5 +112,5 @@ I wouldn't expect anyone to be interested, but the changes I'm making are along 
 
 * Adding a dedicated IMU Type for BerryIMUV4 - this is NOT the same as the current [STM LSM6DS33 + LIS3MDL (optionally with the LPS25H) as used on the Pololu MinIMU-9 v5 and AltIMU-10 v5.] because the BerryIMUV4 has an on-board GPS, plus a Bosch BMP380.
 * Definately re-working the IMU discovery code - its horrible to add a new IMU !. I'm thinking of the existing code as a discovery/probe, but adding a 'compostion' type definition.
-* The AHRS (eg Fusion) and IMU Interface is 'poorly defined' - ultimately, since user could wouldn't or perhaps shouyldn't talk directly to the IMU, the flow should be User -> AHRS -> IMU -composed of-> sensors
+* The AHRS (eg Fusion) and IMU Interface is 'poorly defined' - ultimately, since user couldn't/wouldn't or perhaps shouldn't talk directly to the IMU, the flow should be User -> AHRS -> IMU -composed of-> sensors
 * Setting up the CMakeLists.txt files for cross-compile for my target system.
