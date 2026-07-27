@@ -18,6 +18,7 @@ The Linux directory contains the main demo apps for embedded Linux systems:
 * RTIMULibDemo is a simple GUI app that displays the fused IMU data in real-time.
 * RTIMULibDemoGL adds OpenGL visualization to RTIMULibDemo.
 
+
 RTIMULib is a C++ library but there are also Python bindings in Linux/python. It's easy to build and install the Python RTIMULib library using the provided setup.py after which any Python script will have access to RTIMULib functionality. See Linux/python/README.md (https://github.com/richards-tech/RTIMULib2/blob/master/Linux/python/README.md) for more details. Two demo scripts show how to use the Python interface, and there is a new python script to generate fuse pose data from logged IMU data.  This new post-processing script shows how to read in a csv file that logs the timestamp in milliseconds and the raw accel, gyro, and magnetometer data from the IMU. It loads it and the calibration settings ini file and uses that to generate out the fused pose data and saves that back to another csv file for analysis. A sample data file is included.
 
 Check out www.richards-tech.com for more details, updates and news (note: this link resolves back to the upstream github org which appears dead).
@@ -104,3 +105,12 @@ Also, if using a non-standard axis rotation, magnetometer calibration (and accel
 ##Note:
 This is a fork of richards-tech's library - this version adds support for an IMU (no-name brand) containing an HMC5883L compass, an ADXL345 accelerometer, and an L3G4200D gyro.  This support is experimental and currently incomplete.  Some stuff is hard-coded that should be configurable, but it generally works reliably and gets accurate data from the sensors.
 
+
+##GJL:
+
+I wouldn't expect anyone to be interested, but the changes I'm mkaing are along the lines of:
+
+* Adding a dedicated IMU Type for BerryIMUV4 - this is NOT the same as the current [STM LSM6DS33 + LIS3MDL (optionally with the LPS25H) as used on the Pololu MinIMU-9 v5 and AltIMU-10 v5.] because the BerryIMUV4 has an on-board GPS, plus a Bosch BMP380.
+* Definately re-working the IMU discovery code - its horrible to add a new IMU !. I'm thinking of the existing code as a discovery/probe, but adding a 'compostion' type definition.
+* The AHRS (eg Fusion) and IMU Interface is 'poorly defined' - ultimately, since user could wouldn't or perhaps shouyldn't talk directly to the IMU, the flow should be User -> AHRS -> IMU -composed of-> sensors
+* Setting up the CMakeLists.txt files for cross-compile for my target system.
