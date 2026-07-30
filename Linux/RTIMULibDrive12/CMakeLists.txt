@@ -76,6 +76,7 @@ endif()
 # Add Sources - no globbing !
 SET(RTIMULibDrive12_SRCS
 #   src/RTIMULibDrive12.cpp
+    iDigFunctions.cpp
     RTIMULibDrive12.cpp
 )
 

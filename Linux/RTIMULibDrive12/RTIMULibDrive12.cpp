@@ -23,6 +23,7 @@
 
 
 #include "RTIMULib.h"
+#include "iDigFunctions.h"
 
 int main()
 {
@@ -92,6 +93,14 @@ int main()
             if (humidity != NULL)
                 humidity->humidityRead(imuData);
 
+	    // Add Raw/UnFused Heading (From Yaw)
+
+	    float rawHeading = getUnfusedHeading(imuData);
+
+	    // Add Fused Heading (From Yaw)
+
+	    double headingDegrees = yawToHeading(imuData.fusionPose.z());
+
             sampleCount++;
 
             now = RTMath::currentUSecsSinceEpoch();
@@ -101,14 +110,17 @@ int main()
             if ((now - displayTimer) > 200000) {
                 printf("Sample rate %d: %s\n", sampleRate, RTMath::displayDegrees("", imuData.fusionPose));
 
-                if (pressure != NULL) {
-                    printf("Pressure: %4.1f, height above sea level: %4.1f, temperature: %4.1f",
-                           imuData.pressure, RTMath::convertPressureToHeight(imuData.pressure), imuData.temperature);
-                }
-                if (humidity != NULL) {
-                    printf(", humidity: %4.1f",
-                           imuData.humidity);
-                }
+		printf("Raw Heading %3.2f°, Fused Heading %3.2f°\n", rawHeading, headingDegrees);
+
+                // if (pressure != NULL) {
+                //     printf("Pressure: %4.1f, height above sea level: %4.1f, temperature: %4.1f",
+                //            imuData.pressure, RTMath::convertPressureToHeight(imuData.pressure), imuData.temperature);
+                // }
+                // if (humidity != NULL) {
+                //     printf(", humidity: %4.1f",
+                //            imuData.humidity);
+                // }
+
                 printf("\n");
 
                 fflush(stdout);
